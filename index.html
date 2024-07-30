@@ -1,1 +1,743 @@
-<h1>hello Joe</h1>
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <nav
+    class="navbar navbar-expand-lg bg-success navbar-dark fixed-top"
+    id="navbar"
+  >
+    <div class="container">
+      <a class="navbar-brand" href="#" (click)="reloadPage($event)">Workshop</a>
+      <button class="btn btn-danger logout-button" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </nav>
+
+  <body>
+    <div class="container mt-5">
+      <!-- Search Section -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title">
+            <i class="fas fa-search text-success"></i> VDT0320:
+            ข้อมูลที่ต้องการค้นหา
+          </h2>
+          <div class="form-group row">
+            <label for="summary-number" class="col-6 col-sm-3"
+              >เลขที่ใบสรุป</label
+            >
+            <label for="date" class="col-6 col-sm-4">วันที่</label>
+            <div class="w-100 d-none d-md-block"></div>
+            <div class="col-sm-3">
+              <input
+                type="text"
+                class="form-control"
+                id="vdtNo"
+                [(ngModel)]="searchCriteria.vdtNo"
+                placeholder="Enter ID"
+              />
+            </div>
+            <div class="col-sm-3">
+              <input
+                type="text"
+                class="form-control"
+                id="createDate"
+                bsDatepicker
+                [(ngModel)]="searchCriteria.createDate"
+                placeholder="dd/mm/yyyy"
+                [bsConfig]="bsConfig"
+              />
+            </div>
+            <button
+              id="search-button"
+              class="btn btn-success"
+              (click)="search(template)"
+            >
+              <i class="fas fa-search"></i> ค้นหา
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Section -->
+      <div class="row">
+        <!-- Left Column -->
+        <div class="d-flex r p-3 m-2 bg-white p-5 shadow p-3 mb-3 col-12">
+          <div class="m-1 p-4 col-6">
+            <div class="card mb-4">
+              <div class="vat-section">
+                <h3 class="card-title">
+                  <i class="fas fa-file-alt text-success"></i> VDT0320:
+                  ข้อมูลแบบ ภ.พ.10
+                </h3>
+                <div class="form-group row">
+                  <label
+                    for="bookNo"
+                    class="col-6 col-sm-5 col-form-label text-left"
+                    >เล่มที่<span class="text-danger">*</span></label
+                  >
+                  <label
+                    for="numberNo"
+                    class="col-6 col-sm-4 col-form-label text-left"
+                    >เลขที่<span class="text-danger">*</span></label
+                  >
+                  <div class="w-100 d-none d-md-block"></div>
+                  <div class="col-sm-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="bookNo"
+                      [(ngModel)]="form.bookNo"
+                      placeholder="กรุณากรอกข้อมูล"
+                    />
+                  </div>
+                  <div class="col-sm-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="numberNo"
+                      [(ngModel)]="form.numberNo"
+                      placeholder="กรุณากรอกข้อมูล"
+                    />
+                  </div>
+                </div>
+                <div class="w-100 d-none d-md-block"></div>
+                <div class="form-group row">
+                  <label
+                    for="bookDate"
+                    class="col-sm-5 col-form-label text-left"
+                    >วันที่จดทำ ภ.พ.10<span class="text-danger">*</span></label
+                  >
+                  <label
+                    for="amount"
+                    class="col-1 col-sm-3 col-form-label text-left"
+                    >ยอดซื้อ<span class="text-danger">*</span></label
+                  >
+                  <div class="w-100 d-none d-md-block"></div>
+                  <div class="col-sm-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="bookDate"
+                      bsDatepicker
+                      [(ngModel)]="form.bookDate"
+                      placeholder="dd/mm/yyyy"
+                      [bsConfig]="bsConfig"
+                    />
+                  </div>
+                  <div class="col-sm-5">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="amount"
+                      [ngModel]="amount"
+                      (ngModelChange)="amount = $event"
+                      maxlength="13"
+                    />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="cardNo" class="pl-3 col-form-label text-left"
+                    >เลขประจำตัวผู้เสียภาษีอากร</label
+                  >
+                  <div class="col-sm-5 d-flex align-items-center pl-1 pr-1">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cardNo"
+                      [ngModel]="cardNo"
+                      (ngModelChange)="cardNo = $event"
+                      maxlength="13"
+                      placeholder="กรุณากรอกข้อมูล"
+                    />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="branchNo" class="pl-3 col-form-label text-left"
+                    >สาขาที่</label
+                  >
+                  <div class="col-sm-5 d-flex align-items-center">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="branchNo"
+                      [(ngModel)]="form.branchNo"
+                      maxlength="5"
+                      placeholder="กรุณากรอกข้อมูล"
+                    />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="busiNess" class="pl-3 col-form-label text-left"
+                    >ชื่อสถานประกอบการ</label
+                  >
+                  <div class="col-sm-5 d-flex align-items-center pl-1 pr-1">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="busiNess"
+                      [(ngModel)]="form.busiNess"
+                      placeholder="กรุณากรอกข้อมูล"
+                    />
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                  <button
+                    id="add-button"
+                    class="btn btn-success mt-3"
+                    (click)="addRow()"
+                  >
+                    <i class="fas fa-plus-circle"></i> เพิ่ม
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Right Column -->
+          <div class="m-1 p-4 col-6">
+            <div class="card mb-4">
+              <div class="vat-section">
+                <h3>
+                  <i class="fas fa-calculator text-success"></i> Vat ภาษี และ
+                  ค่าธรรมเนียม
+                </h3>
+                <ul class="vat-list">
+                  <li class="vat-item">
+                    <div class="text-right col-7">
+                      <span>Vat 7%</span>
+                    </div>
+                    <span class="highlight" id="vat-7"
+                      >{{ form.vatNo | number : "1.2-2" }}</span
+                    >
+                  </li>
+                  <li class="vat-item">
+                    <div class="text-right col-7">
+                      <span>ภาษีที่ได้รับคืน(กรมสรรพากร)</span>
+                    </div>
+                    <span class="highlight" id="vat-refund-tax"
+                      >{{ form.rbNo | number : "1.2-2" }}</span
+                    >
+                  </li>
+                  <li class="vat-item">
+                    <div class="text-right col-7">
+                      <span>ภาษีที่ได้รับคืนจากตัวแทน</span>
+                    </div>
+                    <span class="highlight" id="agent-vat-refund"
+                      >{{ form.rbAgentNo | number : "1.2-2" }}</span
+                    >
+                  </li>
+                  <li class="vat-item">
+                    <div class="text-right col-7">
+                      <span>ค่าธรรมเนียมในการคืน</span>
+                    </div>
+                    <span class="highlight" id="refund-fee"
+                      >{{ form.feesNo | number : "1.2-2" }}</span
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table Section -->
+    <div class="container-fluid mt-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table
+              id="dataTable"
+              class="table table-bordered table-hover table-custom"
+            >
+              <thead class="thead-light">
+                <tr>
+                  <th>เล่มที่</th>
+                  <th>เลขที่</th>
+                  <th>วันที่จดทำ ภ.พ.10</th>
+                  <th>ชื่อสถานประกอบการ</th>
+                  <th>ยอดซื้อ</th>
+                  <th>ภาษีมูลค่าเพิ่ม</th>
+                  <th>ภาษีที่ได้รับคืน (กรมสรรพากร)</th>
+                  <th>ภาษีที่ได้รับคืน (ตัวแทน)</th>
+                  <th>ค่าธรรมเนียมในการคืน</th>
+                  <th class="text-center">
+                    <i class="fas fa-file-alt h3 text-success"></i>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of tableData">
+                  <td>{{ row.bookNo }}</td>
+                  <td>{{ row.numberNo }}</td>
+                  <td>{{ convertToBuddhistEra(row.bookDate) }}</td>
+                  <td>{{ row.busiNess }}</td>
+                  <td class="text-right">
+                    {{ row.amount | number : "1.2-2" }}
+                  </td>
+                  <td class="text-right">{{ row.vatNo | number : "1.2-2" }}</td>
+                  <td class="text-right">{{ row.rbNo | number : "1.2-2" }}</td>
+                  <td class="text-right">
+                    {{ row.rbAgentNo | number : "1.2-2" }}
+                  </td>
+                  <td class="text-right">
+                    {{ row.feesNo | number : "1.2-2" }}
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-warning btn-sm m-1"
+                      (click)="editRow(row)"
+                    >
+                      <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm"
+                      (click)="confirmDelete(row)"
+                    >
+                      <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <button class="btn btn-primary" (click)="saveTableData()">
+        <i class="fas fa-save"></i> บันทึก
+      </button>
+      <button class="btn btn-secondary" (click)="convertBase64ToPDF()">
+        <i class="fas fa-print"></i> พิมพ์ใบสรุป
+      </button>
+      <button class="btn btn-danger" (click)="clearFormAndTable()">
+        <i class="fas fa-trash"></i> ล้างจอภาพ
+      </button>
+    </div>
+
+    <!-- template.component.html -->
+
+    <ng-template #template>
+      <div class="modal-dialog modal-dialog-centered text-white rounded-top">
+        <h2 class="modal-title-lg text-success" id="my-modal-title">
+          ค้นหาเลขที่ใบสรุป
+        </h2>
+      </div>
+      <div class="modal-body bg-light">
+        <div id="my-modal-description">
+          <ul class="list-group">
+            <li
+              *ngFor="let item of uniqueResults"
+              class="list-group-item list-group-item-action mb-2 shadow-sm rounded"
+            >
+              <div
+                class="item-container item-label"
+                (click)="confirmSelection(item)"
+              >
+                <label class="form-check-label text-success item-label">
+                  <strong>เลขที่ใบสรุป {{ item.vdtNo }}</strong>
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-template>
+
+    <style>
+      .item-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border: 1px solid #28a745; /* Green border */
+        border-radius: 8px;
+        background-color: #f8f9fa; /* Light grey background */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        transition: transform 0.3s ease; /* Smooth transform transition */
+      }
+
+      .item-container:hover {
+        transform: scale(1.05); /* Slightly enlarge on hover */
+      }
+
+      .item-label {
+        cursor: pointer;
+        font-size: 18px; /* Larger font size for better readability */
+        transition: color 0.3s ease; /* Smooth color transition */
+      }
+
+      .item-label:hover {
+        color: #155724; /* Darker green on hover */
+      }
+
+      .cardrowover {
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      /* styles.css (หรือไฟล์ CSS ของคุณ) */
+
+      .form-check-input {
+        position: relative;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #28a745; /* สีเขียว */
+        border-radius: 50%;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .form-check-input:checked {
+        background-color: #28a745; /* สีพื้นหลังเมื่อเลือก */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* เพิ่มเงาเมื่อถูกเลือก */
+      }
+
+      .form-check-input::after {
+        display: block;
+        width: 12px;
+        height: 12px;
+        background-color: #28a745; /* สีของปุ่มแสดงการเลือก */
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        content: "";
+        opacity: 0; /* ซ่อนเมื่อยังไม่ได้เลือก */
+        transition: opacity 0.3s ease;
+      }
+
+      .form-check-input:checked::after {
+        opacity: 1; /* แสดงเมื่อถูกเลือก */
+      }
+
+      body {
+        background: #f5f7fa;
+        font-family: "Arial", sans-serif;
+      }
+
+      .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      .card-title {
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: #343a40;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        color: #495057;
+      }
+
+      .form-control {
+        border: 2px solid #ced4da;
+        border-radius: 8px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .btn {
+        margin-right: 5px;
+      }
+      .btn-success {
+        background: #28a745;
+        border: none;
+        border-radius: 50px;
+        transition: background 0.3s ease;
+      }
+
+      .btn-success:hover {
+        background: #218838;
+      }
+
+      .table-custom {
+        width: 100%;
+        table-layout: fixed;
+      }
+
+      .table-custom th,
+      .table-custom td {
+        text-align: center;
+        padding: 12px;
+        font-size: 16px;
+      }
+
+      .table-custom th {
+        background-color: #e9ecef;
+        font-weight: bold;
+      }
+
+      .table-custom td {
+        background-color: #fff;
+      }
+      .table {
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .table th,
+      .table td {
+        vertical-align: middle;
+        padding: 12px;
+      }
+
+      .table thead {
+        background: #e9ecef;
+      }
+
+      .vat-section {
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        margin-top: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .vat-section h3 {
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: #343a40;
+      }
+
+      .vat-section ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .vat-section li {
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        background: #f8f9fa;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        transition: background 0.3s ease;
+      }
+
+      .vat-section li:hover {
+        background: #e9ecef;
+      }
+
+      .vat-section li::before {
+        content: "\f022"; /* FontAwesome check-circle icon */
+        font-family: "FontAwesome";
+        color: #28a745;
+        margin-right: 10px;
+      }
+
+      .highlight {
+        color: #dc3545;
+        font-weight: bold;
+      }
+
+      .d-flex .btn {
+        margin: 0 5px;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+      }
+
+      .d-flex .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .vat-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        width: 100%; /* ปรับให้ครอบคลุมพื้นที่ทั้งหมด */
+      }
+
+      .vat-item span {
+        flex: 1;
+        text-align: right;
+      }
+      .modal-header {
+        color: #fff;
+        padding: 10px 20px;
+        border-bottom: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-title {
+        margin: 0;
+        font-size: 1.25rem;
+      }
+
+      .btn-close {
+        color: #fff;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+
+      .modal-body {
+        padding: 20px;
+      }
+
+      .search-results-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .search-item {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .checkbox-input {
+        display: none;
+      }
+
+      .checkbox-custom {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #158309;
+        border-radius: 4px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s, border-color 0.3s;
+      }
+
+      .checkbox-input:checked + .checkbox-custom {
+        background-color: #19bc1f;
+        border-color: #1aa11e;
+      }
+
+      .checkbox-input:checked + .checkbox-custom::after {
+        content: "✔";
+        color: rgb(255, 255, 255);
+        font-size: 14px;
+      }
+
+      .item-details {
+        font-size: 0.9rem;
+        color: #333;
+      }
+
+      .modal-footer {
+        padding: 10px 20px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #ccc;
+        text-align: right;
+      }
+
+      .btn-ok {
+        background-color: #28a745;
+        border: none;
+        padding: 10px 20px;
+        color: #fff;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .btn-ok:hover {
+        background-color: #28812c;
+      }
+      tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+
+      tbody tr td {
+        background-color: #ecfde6; /* Light brown background color */
+        transition: background-color 0.3s;
+      }
+
+      tbody tr:hover td {
+        background-color: #ffffff; /* White background color on hover */
+      }
+      .table-custom {
+        width: 100%;
+        margin: 20px 0;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      }
+      .table-custom th {
+        background-color: #f8f9fa;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      .table-custom tbody tr:hover {
+        background-color: #f1f1f1;
+      }
+      .table-custom .fa-file-alt {
+        color: #09d982;
+      }
+      .navbar {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      .navbar.scrolled {
+        background-color: rgba(
+          40,
+          167,
+          69,
+          0.8
+        ) !important; /* Slightly darker green */
+
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+      }
+      .logout-button {
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .logout-button:hover {
+        background-color: #d32f2f;
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
